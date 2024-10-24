@@ -13,11 +13,17 @@ export default class CachedRequestsManager {
         console.log(BgWhite + FgBlue, "[Periodic repositories data caches cleaning process started...]");
     }
 
-    static add(url, content, ETag = "") {
+    static add(url, content, ETag = "", HttpContext) {
+        if (!HttpContext.isCacheable) {
+            console.log(BgWhite + FgBlue, `[Requête non cachable pour l'URL : ${url}]`);
+            return;
+        }
+    
         if (!global.cachedRequestsCleanerStarted) {
             global.cachedRequestsCleanerStarted = true;
             CachedRequestsManager.startCachedRequestsCleaner();
         }
+    
         if (url) {
             CachedRequestsManager.clear(url);
             global.getRequestCaches.push({
@@ -29,6 +35,7 @@ export default class CachedRequestsManager {
             console.log(BgWhite + FgBlue, `[Ajout dans la cache : URL = ${url}, ETag = ${ETag}]`);
         }
     }
+    
 
     static find(url) {
         try {

@@ -43,7 +43,7 @@ export default class Response {
     }
     JSON(obj, ETag = "", fromCache = false) {  // ok status with content
         if (!fromCache && this.HttpContext.isCacheable) {
-            CachedRequestsManager.add(this.HttpContext.req.url, obj, ETag);
+            CachedRequestsManager.add(this.HttpContext.req.url, obj, ETag, this.HttpContext);
         }
         
         if (ETag != "")
