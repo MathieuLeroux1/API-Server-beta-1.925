@@ -2,7 +2,7 @@ import * as utilities from "./utilities.js";
 import * as serverVariables from "./serverVariables.js";
 import {log} from "./log.js"
 
-let cacheExpirationTime = serverVariables.get("main.cache.CacheExpirationTime");
+let cacheExpirationTime = serverVariables.get("main.requestCache.expirationTime");
 
 global.getRequestCaches = [];
 global.cachedRequestsCleanerStarted = false;
