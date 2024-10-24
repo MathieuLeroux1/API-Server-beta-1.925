@@ -24,7 +24,7 @@ export default class CachedRequestsManager {
             CachedRequestsManager.startCachedRequestsCleaner();
         }
     
-        if (url) {
+        if (url != "") {
             CachedRequestsManager.clear(url);
             global.getRequestCaches.push({
                 url,
@@ -41,9 +41,11 @@ export default class CachedRequestsManager {
         try {
             if (url) {
                 for (let cache of global.getRequestCaches) {
+                    console.log(cache)
                     if (cache.url === url) {
                         cache.Expire_Time = utilities.nowInSeconds() + cacheExpirationTime;
                         console.log(BgWhite + FgBlue, `[Extraction de la cache : URL = ${url}]`);
+                        
                         return {
                             content: cache.content,
                             ETag: cache.ETag
@@ -77,11 +79,11 @@ export default class CachedRequestsManager {
     }
 
     static get(HttpContext) {
-        if (!HttpContext || !HttpContext.request || !HttpContext.request.url) {
+        if (!HttpContext || !HttpContext.req || !HttpContext.req.url) {
             console.error("HttpContext ou HttpContext.request.url est indéfini");
             return false;
         }
-        let cachedResponse = CachedRequestsManager.find(HttpContext.request.url);
+        let cachedResponse = CachedRequestsManager.find(HttpContext.req.url);
         if (cachedResponse) {
             HttpContext.response.JSON(
                 cachedResponse.content,
